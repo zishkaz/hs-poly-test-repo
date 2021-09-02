@@ -50,7 +50,8 @@ import Test.Tasty.Ingredients (composeReporters)
 data KotoedRunnerStatus =  ABORTED | SUCCESSFUL | NOT_IMPLEMENTED | FAILED
     deriving (Show, Eq, Bounded, Enum, Generic)
 data KotoedRunnerTestFailure = KotoedRunnerTestFailure {
-    nestedException :: String
+    nestedException :: Maybe String,
+    errorMessage :: Maybe String
 } deriving (Show, Eq, Generic)
 data KotoedRunnerTestResult = KotoedRunnerTestResult {
     status :: KotoedRunnerStatus,
@@ -100,12 +101,18 @@ instance Chunky KotoedRunnerStatus where
           rep = show s in
       color s <$> toChunks rep
 
+instance Chunky KotoedRunnerTestFailure where
+    toChunks (KotoedRunnerTestFailure nestedException errorMessage) =
+      let combined =
+            case (nestedException, errorMessage) of
+                 (Just ex,         Just e) -> ex `mix` newLine `mix` e
+                 (Just ex,         _)      -> toChunks ex
+                 (_      ,         Just e) -> toChunks e
+                 _                         -> []
+      in Rainbow.fore Rainbow.red <$> combined
 instance Chunky KotoedRunnerTestResult where
     toChunks (KotoedRunnerTestResult status failure) = status `mix` failureTail failure
-      where failureTail (Just e) = e & nestedException
-                                     & toChunks
-                                    <&> Rainbow.fore Rainbow.red
-                                     & (newLine `mix`)
+      where failureTail (Just e) = newLine `mix` e
             failureTail Nothing = []
 
 instance Chunky KotoedRunnerTestMethodRun where
@@ -166,16 +173,16 @@ kotoedIngredient = Tasty.TestReporter [] runner
             let mkResult r = Summary [KotoedRunnerTestMethodRun [] [r] testName package]
                 mkSuccess = mkResult $ KotoedRunnerTestResult SUCCESSFUL Nothing
                 mkNotImpl = mkResult $ KotoedRunnerTestResult NOT_IMPLEMENTED Nothing
-                mkFailure result = mkResult $ KotoedRunnerTestResult FAILED err
-                  where err = Just $ KotoedRunnerTestFailure $ Tasty.resultDescription result
+                mkFailure ex result = mkResult $ KotoedRunnerTestResult FAILED err
+                  where err = Just $ KotoedRunnerTestFailure ex (Just $ Tasty.resultDescription result)
                 processResult result | Tasty.resultSuccessful result = mkSuccess
                 processResult result =
                   case resultException result of
                         Just e  | show e == show NotImplementedYet -> mkNotImpl
-                                | otherwise -> mkFailure result
+                                | otherwise -> mkFailure (Just $ show e) result
                         Nothing | "Exception: '#FUNCTION_NOT_IMPLEMENTED#'" `isInfixOf` Tasty.resultDescription result -> mkNotImpl
                                 | "Exception: #FUNCTION_NOT_IMPLEMENTED#" `isInfixOf` Tasty.resultDescription result -> mkNotImpl
-                                | otherwise -> mkFailure result
+                                | otherwise -> mkFailure Nothing result
             case status of
               -- If the test is done, generate JSON for it
               Tasty.Done result -> do
