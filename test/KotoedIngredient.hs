@@ -200,7 +200,9 @@ kotoedIngredient = Tasty.TestReporter [] runner
         return $ \elapsedTime -> do
           createPathDirIfMissing path
           J.encodeFile path summary
-          return $ notElem FAILED [status result | run <- krtData summary, result <- results run]
+          -- return $ notElem FAILED [status result | run <- krtData summary, result <- results run]
+          -- unfortunately, kotoed expects all processes to return 0, otherwise it's considered a build failure
+          return True
 
   resultException r =
     case Tasty.resultOutcome r of
