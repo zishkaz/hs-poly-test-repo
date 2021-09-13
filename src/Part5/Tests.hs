@@ -1,8 +1,8 @@
-module Part1.Tests where
+module Part5.Tests where
 
 import Test.Tasty.HUnit
 
-import Part1.Tasks
+import Part5.Tasks
 import Util
 
 unit_myFoldl = do
@@ -34,7 +34,13 @@ prop_myReverse lst = myReverse (myReverse lst) == lst
     where types = lst :: [String]
 
 unit_myConcat = do
-    assertEqual "" "abc" (myConcat ["a", "b", "c"])
+    "abc" @?= myConcat ["a", "b", "c"]
+    "ab" @?= myConcat ["a", "", "b", ""]
+    "" @?= myConcat ["", ""]
+    "" @?= myConcat []
+
+prop_myConcat :: [[Int]] -> Bool
+prop_myConcat lst = myConcat lst == concat lst
 
 unit_myFilter = do
     myFilter (`elem` "123456789") "a1v234asas5" @?= "12345"
