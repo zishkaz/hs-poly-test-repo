@@ -1,7 +1,6 @@
 module Part1.Tasks where
 
 import Util(notImplementedYet)
-import Data.Fixed(mod')
 
 -- синус числа (формула Тейлора)
 mySin :: Double -> Double

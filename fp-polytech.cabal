@@ -23,6 +23,7 @@ test-suite sample-tests
     Part3.Tasks Part3.Tests
     Part4.Tasks Part4.Tests
     Part5.Tasks Part5.Tests
+    Part6.Tasks Part6.Tests
   build-depends:
     base,
     safe-exceptions,

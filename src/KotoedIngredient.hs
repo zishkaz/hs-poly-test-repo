@@ -179,9 +179,11 @@ kotoedIngredient = Tasty.TestReporter [] runner
                 processResult result =
                   case resultException result of
                         Just e  | show e == show NotImplementedYet -> mkNotImpl
+                                | "No instance nor default method for class" `isInfixOf` show e -> mkNotImpl
                                 | otherwise -> mkFailure (Just $ show e) result
                         Nothing | "Exception: '#FUNCTION_NOT_IMPLEMENTED#'" `isInfixOf` Tasty.resultDescription result -> mkNotImpl
                                 | "Exception: #FUNCTION_NOT_IMPLEMENTED#" `isInfixOf` Tasty.resultDescription result -> mkNotImpl
+                                | "No instance nor default method for class" `isInfixOf` Tasty.resultDescription result -> mkNotImpl
                                 | otherwise -> mkFailure Nothing result
             case status of
               -- If the test is done, generate JSON for it
