@@ -97,3 +97,10 @@ prop_shapeArea (x, y) w h =
         case3 = shapeArea [(x', y'), (x'', y''), (x'', y')] `nearlyEqual'` abs h' * abs w' / 2
     in
         w /= 0 && h /= 0 ==> case1 .&&. case2 .&&. case3
+
+unit_triangleKind =
+    do
+        triangleKind 3.0 7.5 4.0 @?= (-1)
+        triangleKind 5.0 3.0 4.0 @?= 1
+        triangleKind 4.0 6.0 8.0 @?= 2
+        triangleKind 1.0 1.5 1.5 @?= 0

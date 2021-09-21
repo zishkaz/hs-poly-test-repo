@@ -43,7 +43,13 @@ prop_myConcat :: [[Int]] -> Bool
 prop_myConcat lst = myConcat lst == concat lst
 
 unit_myFilter = do
+    myFilter (`elem` "123456789") "" @?= ""
     myFilter (`elem` "123456789") "a1v234asas5" @?= "12345"
 
 prop_myFilter :: [Int] -> Bool
 prop_myFilter lst = myFilter (\x -> x `mod` 2 == 1) lst == filter (\x -> x `mod` 2 == 1) lst
+
+prop_myPartition :: [Int] -> Bool
+prop_myPartition lst =
+    let pred x = x `mod` 2 == 1 in
+    myPartition pred lst == (filter pred lst, filter (not.pred) lst)
