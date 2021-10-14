@@ -1,3 +1,4 @@
+-- Этот код нужен для запуска тестов в Котоеде, не трогайте его, пожалуйста
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE DeriveGeneric #-}
@@ -7,7 +8,6 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE PatternSynonyms #-}
-
 module KotoedIngredient (kotoedIngredient, composite) where
 
 import Numeric (showFFloat)

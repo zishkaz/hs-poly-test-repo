@@ -2,11 +2,15 @@ module Part5.Tasks where
 
 import Util(notImplementedYet)
 
+-- Реализуйте левую свёртку
 myFoldl :: (b -> a -> b) -> b -> [a] -> b
 myFoldl = notImplementedYet
 
+-- Реализуйте правую свёртку
 myFoldr :: (a -> b -> b) -> b -> [a] -> b
 myFoldr = notImplementedYet
+
+-- Используя реализации свёрток выше, реализуйте все остальные функции в данном файле
 
 myMap :: (a -> b) -> [a] -> [b]
 myMap f = notImplementedYet
