@@ -1,7 +1,0 @@
-{
-    "haskell.serverExecutablePath": "/home/belyaev/.local/bin/haskell-language-server",
-    "files.autoSave": "onFocusChange",
-    "files.trimTrailingWhitespace": true,
-    "editor.renderControlCharacters": true,
-    "editor.wordWrap": "on"
-}
