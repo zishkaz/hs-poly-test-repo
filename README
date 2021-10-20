@@ -1,12 +1,11 @@
-A very simple and trivial sample project showing how to use HTF,
-the Haskell Test Framework (https://github.com/skogsbaer/HTF/).
+Репозиторий с заданиями по курсу функционального программирования 2021.
 
-Usage:
+Запуск
 
-$ cabal configure --enable-tests
-$ cabal build
-$ cabal test
+$ stack test
 
-To execute the tests directly, run
+Запуск интерпретатора с модулями репозитория
 
-$ dist/build/sample-tests/sample-tests
+$ stack ghci --test
+
+
